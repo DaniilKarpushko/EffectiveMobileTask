@@ -5,8 +5,8 @@
 /contentModel.xml
 /modules.xml
 /.idea.IPChecker.iml
-/obj
-/bin
+/obj/
+/bin/
 /projectSettingsUpdater.xml
 # Editor-based HTTP Client requests
 /httpRequests/
