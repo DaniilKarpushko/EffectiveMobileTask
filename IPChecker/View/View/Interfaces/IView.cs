@@ -2,6 +2,6 @@
 
 public interface IView
 {
-    void Listen();
+    string ReadArguments();
     void Update(string data);
 }

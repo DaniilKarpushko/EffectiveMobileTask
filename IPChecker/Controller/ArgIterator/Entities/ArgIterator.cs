@@ -1,11 +1,17 @@
 ﻿using System.Collections;
+using Controller.ArgIterator.Interfaces;
 
 namespace Controller.ArgIterator.Entities;
 
-public class ArgIterator : IEnumerator
+public class ArgIterator : IArgIterator
 {
-    private string[] _args;
+    private readonly string[] _args;
     private int _position = -1;
+
+    public ArgIterator(string[] args)
+    {
+        _args = args;
+    }
 
     public bool MoveNext()
     {
@@ -18,7 +24,7 @@ public class ArgIterator : IEnumerator
         _position = -1;
     }
 
-    public string Current
+    private string Current
     {
         get
         {
@@ -31,6 +37,11 @@ public class ArgIterator : IEnumerator
                 throw new InvalidOperationException();
             }
         }
+    }
+
+    public int CurrentPosition()
+    {
+        return _position;
     }
 
     object IEnumerator.Current => Current;

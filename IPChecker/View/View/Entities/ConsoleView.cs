@@ -4,9 +4,10 @@ namespace View.View.Entities;
 
 public class ConsoleView : IView
 {
-    public void Listen()
+   public string ReadArguments()
     {
-        var argsString = Console.ReadLine();
+        Console.WriteLine("Please, make a request: ");
+        return Console.ReadLine() ?? string.Empty;
         
         
     }
