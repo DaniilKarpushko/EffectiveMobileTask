@@ -30,7 +30,7 @@ public class ReadTxtService : IReadService
         var reader = new StreamReader(file);
         while (!reader.EndOfStream)
         {
-            var data = reader.ReadLine()?.Split(' ', ':');
+            var data = reader.ReadLine()?.Split(' ', ':').Where(x => x.Length > 0).ToArray();
 
             if (data is null) continue;
 

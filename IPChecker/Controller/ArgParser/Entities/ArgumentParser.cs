@@ -39,8 +39,8 @@ public class ArgumentParser : IArgumentParser
 
     private bool CheckNecessaryArgs(ParsedArgs args)
     {
-        return args.FileLog == null || args.FileOutput == null
-                                    || args is { AddressMask: not null, AddressStart: null };
-        
+        return args is { FileLog: not null, FileOutput: not null } &&
+               (args.AddressStart != null || args.AddressStart == null && args.AddressMask == null);
+
     }
 }

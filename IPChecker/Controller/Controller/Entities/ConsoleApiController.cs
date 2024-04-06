@@ -30,23 +30,35 @@ public class ConsoleApiController : IConsoleApiController
 
     public void GetConsoleRequest()
     {
-        var iterator = new ArgIterator.Entities.ArgIterator(_view.ReadArguments().Split(' ').Where(x => x.Length > 0).ToArray());
+        var request = _view.ReadArguments().Split(' ').Where(x => x.Length > 0).ToArray();
+        if (request.Length == 0)
+        {
+            _view.Update("Error: Empty request");
+            return;
+        }
+        var iterator = new ArgIterator.Entities.ArgIterator(request);
         var result = _argumentParser.Parse(iterator);
-        if (result is ParseResult.Success success)
+        
+        switch (result)
         {
-            var args = success.ParsedArgsBuilder.Build();
-            _readService.ReadFrom(args.FileLog!, new DataValidator(
-                args.TimeStart is not null
-                    ? DateTime.ParseExact(args.TimeStart, "yyyy-MM-dd", CultureInfo.InvariantCulture)
-                    : null,
-                args.TimeEnd is not null
-                    ? DateTime.ParseExact(args.TimeEnd, "yyyy-MM-dd", CultureInfo.InvariantCulture)
-                    : null,
-                args.AddressStart is not null ? IPAddress.Parse(args.AddressStart) : null,
-                args.AddressMask is not null ? IPAddress.Parse(args.AddressMask) : null));
-        }else if (result is ParseResult.Failure failure)
-        {
-            _view.Update(failure.Message);
+            case ParseResult.Success success:
+            {
+                var args = success.ParsedArgsBuilder.Build();
+                var readData = _readService.ReadFrom(args.FileLog!, new DataValidator(
+                    args.TimeStart is not null
+                        ? DateTime.ParseExact(args.TimeStart, "yyyy-MM-dd", CultureInfo.InvariantCulture)
+                        : null,
+                    args.TimeEnd is not null
+                        ? DateTime.ParseExact(args.TimeEnd, "yyyy-MM-dd", CultureInfo.InvariantCulture)
+                        : null,
+                    args.AddressStart is not null ? IPAddress.Parse(args.AddressStart) : null,
+                    args.AddressMask is not null ? IPAddress.Parse(args.AddressMask) : null));
+                _writeService.Write(args.FileOutput!, readData);
+                break;
+            }
+            case ParseResult.Failure failure:
+                _view.Update(failure.Message);
+                break;
         }
     }
 }

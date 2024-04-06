@@ -13,9 +13,12 @@ public class StartLink : ParserLinkBase
     {
         if (iterator.CurrentPosition() == _prevPosition && !iterator.MoveNext())
         {
+            _prevPosition = -1;
             return new ParseResult.Failure("Error: Unknown argument detected");
         }
         _prevPosition = iterator.CurrentPosition();
-        return Next?.Handle(iterator, argumentCollector)!;
+        var result = Next?.Handle(iterator, argumentCollector)!;
+        _prevPosition = -1;
+        return result;
     }
 }
