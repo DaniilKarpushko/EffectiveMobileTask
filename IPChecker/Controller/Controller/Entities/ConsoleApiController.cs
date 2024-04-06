@@ -30,7 +30,7 @@ public class ConsoleApiController : IConsoleApiController
 
     public void GetConsoleRequest()
     {
-        var request = _view.ReadArguments().Split(' ').Where(x => x.Length > 0).ToArray();
+        var request = _view.ReadArguments();
         if (request.Length == 0)
         {
             _view.Update("Error: Empty request");
@@ -46,10 +46,10 @@ public class ConsoleApiController : IConsoleApiController
                 var args = success.ParsedArgsBuilder.Build();
                 var readData = _readService.ReadFrom(args.FileLog!, new DataValidator(
                     args.TimeStart is not null
-                        ? DateTime.ParseExact(args.TimeStart, "yyyy-MM-dd", CultureInfo.InvariantCulture)
+                        ? DateTime.ParseExact(args.TimeStart, "dd-MM-yyyy", CultureInfo.InvariantCulture)
                         : null,
                     args.TimeEnd is not null
-                        ? DateTime.ParseExact(args.TimeEnd, "yyyy-MM-dd", CultureInfo.InvariantCulture)
+                        ? DateTime.ParseExact(args.TimeEnd, "dd-MM-yyyy", CultureInfo.InvariantCulture)
                         : null,
                     args.AddressStart is not null ? IPAddress.Parse(args.AddressStart) : null,
                     args.AddressMask is not null ? IPAddress.Parse(args.AddressMask) : null));

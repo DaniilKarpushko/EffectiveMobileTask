@@ -13,6 +13,11 @@ public class ArgIterator : IArgIterator
         _args = args;
     }
 
+    public ArgIterator(string args)
+    {
+        _args = args.Split(" ").Where(x => x.Length > 0).ToArray();
+    }
+
     public bool MoveNext()
     {
         _position++;
